@@ -56,11 +56,11 @@ def data(cuil: str):
             response = session.post(url, headers=headers, data=payload, timeout=10)
             response.raise_for_status()  # Raise an error for HTTP issues
             texto = response.text
-            inicio = texto.index("Fecha de actualización")
+            inicio = texto.index("Fecha de actualizaci")
             fin = texto.index("<a href='https://seguro.sssalud.gob.ar/indexss.php")
             return texto[inicio:fin]
-    except requests.exceptions.RequestException as e:
-        print(f"Error during request: {e}")
+    except:
+        print(f"Error during request")
         return ''
 
 def scrap(user, password, cuit) -> str:
