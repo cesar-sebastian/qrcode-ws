@@ -1,5 +1,6 @@
 import requests
 
+
 def login(sss_user:str , sss_pass: str) -> bool:
 
     url = "https://seguro.sssalud.gob.ar/login.php?opc=bus650&user=RNOS&cat=consultas"
@@ -16,6 +17,10 @@ def login(sss_user:str , sss_pass: str) -> bool:
         with requests.Session() as session:
             response = session.post(url, headers=headers, data=payload, timeout=10)
             response.raise_for_status()
+
+            if "El Usuario o la Clave son incorrectos." in response.text:
+                return False
+            
             return True
     except requests.exceptions.RequestException as e:
         return False
@@ -59,5 +64,14 @@ def data(cuil: str):
         return ''
 
 def scrap(user, password, cuit) -> str:
-    login(user, password)
+    dataScrap = data(cuit)
+    
+    if dataScrap != '':
+        return dataScrap
+    
+    dataLogin = login(user, password)
+    
+    if not dataLogin:
+        raise Exception('Error login')
+
     return data(cuit)

@@ -22,13 +22,19 @@ def qr():
 
 @app.route('/sss', methods=['POST'])
 def sss():
-    user = request.form.get('user')
-    password = request.form.get('pass')
-    cuit = request.form.get('cuit')
+    data = request.get_json()
+
+    user = data.get('user')
+    password = data.get('password')
+    cuit = data.get('cuit')
 
     if not user or not password or not cuit:
         return 'Faltan valores', 400
 
-    return scrap(user, password, cuit)
+    try:
+        dataScrap = scrap(user, password, cuit)
+        return dataScrap
+    except Exception as e:
+        return f"Error: {str(e)}", 500
 
     
